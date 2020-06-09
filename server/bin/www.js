@@ -5,10 +5,10 @@
  */
 import winston from 'winston';
 import app from '../app';
-import debugLib from 'debug';
+const debug = require('debug')('server:server')
 import http from 'http';
-const debug = debugLib('todoodler-auth-server:server');
 import { PORT } from '../../config/config';
+
 /**
  * Get port from environment and store in Express.
  */
@@ -87,7 +87,7 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug('listening on ' + bind);
   winston.info(`listening on ${bind}`);
 }
 

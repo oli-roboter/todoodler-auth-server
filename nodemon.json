@@ -1,6 +1,14 @@
 { 
   "exec": "npm run dev",
   "watch": ["server/*", "public/*"],
-  "ignore": ["**/__tests__/**", "*.test.js", "*.spec.js"]
+  "ignore": [
+    "**/__tests__/**", 
+    "*.test.js", 
+    "*.spec.js"
+  ],
+  "verbose": true,
+  "env":{
+    "DEBUG": "server:*"
+  }
 }
 
