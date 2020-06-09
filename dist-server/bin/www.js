@@ -5,20 +5,24 @@
  */
 "use strict";
 
+var _dotenv = _interopRequireDefault(require("dotenv"));
+
 var _app = _interopRequireDefault(require("../app"));
 
 var _debug = _interopRequireDefault(require("debug"));
 
 var _http = _interopRequireDefault(require("http"));
 
+var _config = require("../../config");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var debug = (0, _debug["default"])('todoodler-auth-server:server');
+
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(_config.PORT || '3000');
 
 _app["default"].set('port', port);
 /**
@@ -90,4 +94,5 @@ function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log('listening on', bind);
 }

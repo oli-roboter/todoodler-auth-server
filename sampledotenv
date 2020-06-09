@@ -1,0 +1,4 @@
+NODE_ENV=development
+PORT=8000
+USERS_DB_URL=mongodb://localhost:27017
+USERS_DB_NAME=users_auth
