@@ -5,7 +5,7 @@
  */
 "use strict";
 
-var _dotenv = _interopRequireDefault(require("dotenv"));
+var _winston = _interopRequireDefault(require("winston"));
 
 var _app = _interopRequireDefault(require("../app"));
 
@@ -13,7 +13,7 @@ var _debug = _interopRequireDefault(require("debug"));
 
 var _http = _interopRequireDefault(require("http"));
 
-var _config = require("../../config");
+var _config = require("../../config/config");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -94,5 +94,6 @@ function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log('listening on', bind);
+
+  _winston["default"].info("listening on ".concat(bind));
 }
