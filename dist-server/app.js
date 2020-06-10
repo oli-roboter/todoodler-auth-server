@@ -13,9 +13,11 @@ var _cookieParser = _interopRequireDefault(require("cookie-parser"));
 
 var _loggerConfig = _interopRequireDefault(require("../config/logger-config"));
 
-var _index = _interopRequireDefault(require("./routes/index"));
+var _adaptRequest = _interopRequireDefault(require("./helpers/adapt-request"));
 
-var _users = _interopRequireDefault(require("./routes/users"));
+var _auth = _interopRequireDefault(require("./auth"));
+
+var _config = _interopRequireDefault(require("winston/lib/winston/config"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -27,7 +29,22 @@ app.use(_express["default"].urlencoded({
 }));
 app.use((0, _cookieParser["default"])());
 app.use(_express["default"]["static"](_path["default"].join(__dirname, '../public')));
-app.use('/', _index["default"]);
-app.use('/users', _users["default"]);
+app.use('/authorise', authController);
+app.use('/login', authController);
+
+function authController(req, res) {
+  var httpRequest = (0, _adaptRequest["default"])(req);
+  console.log(httpRequest);
+  (0, _auth["default"])(httpRequest).then(function (_ref) {
+    var headers = _ref.headers,
+        statusCode = _ref.statusCode,
+        data = _ref.data;
+    console.log(headers, statusCode, data);
+    res.set(headers).status(statusCode).send(data);
+  })["catch"](function (e) {
+    return res.send(status(500).end());
+  });
+}
+
 var _default = app;
 exports["default"] = _default;

@@ -5,18 +5,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _express = _interopRequireDefault(require("express"));
+var _authEndpoint = _interopRequireDefault(require("./auth-endpoint"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var router = _express["default"].Router();
-/* GET home page. */
-
-
-router.get('/', function (req, res, next) {
-  res.render('index', {
-    title: 'Express'
-  });
+var authInfo = {
+  user: "Xineibo",
+  token: 123
+};
+var authEndpointHandler = (0, _authEndpoint["default"])({
+  authInfo: authInfo
 });
-var _default = router;
+var _default = authEndpointHandler;
 exports["default"] = _default;
