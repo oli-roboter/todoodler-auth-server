@@ -29,21 +29,22 @@ app.use(_express["default"].urlencoded({
 }));
 app.use((0, _cookieParser["default"])());
 app.use(_express["default"]["static"](_path["default"].join(__dirname, '../public')));
-app.use('/authorise', authController);
-app.use('/login', authController);
+app.use('/authorise', expressCallback(_auth["default"])); // app.use('/login', expressCallback(handleLoginRequest));
 
-function authController(req, res) {
-  var httpRequest = (0, _adaptRequest["default"])(req);
-  console.log(httpRequest);
-  (0, _auth["default"])(httpRequest).then(function (_ref) {
-    var headers = _ref.headers,
-        statusCode = _ref.statusCode,
-        data = _ref.data;
-    console.log(headers, statusCode, data);
-    res.set(headers).status(statusCode).send(data);
-  })["catch"](function (e) {
-    return res.send(status(500).end());
-  });
+function expressCallback(requestHandler) {
+  return function (req, res) {
+    var httpRequest = (0, _adaptRequest["default"])(req);
+    console.log(httpRequest);
+    requestHandler(httpRequest).then(function (_ref) {
+      var headers = _ref.headers,
+          statusCode = _ref.statusCode,
+          data = _ref.data;
+      // console.log(headers, statusCode, data);
+      res.set(headers).status(statusCode).send(data);
+    })["catch"](function (e) {
+      return res.send(status(500).end());
+    });
+  };
 }
 
 var _default = app;

@@ -18,38 +18,15 @@ function makeAuthEndpointHandler(_ref) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.t0 = httpRequest.method;
-              _context.next = _context.t0 === 'POST' ? 3 : _context.t0 === 'GET' ? 5 : 7;
+              _context.next = _context.t0 === 'GET' ? 3 : 4;
               break;
 
             case 3:
-              console.log('POSTIN');
-              return _context.abrupt("return", {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                statusCode: 200,
-                data: JSON.stringify({
-                  data: {
-                    name: authInfo.user
-                  }
-                })
-              });
+              return _context.abrupt("return", checkAuth({
+                authInfo: authInfo
+              }));
 
-            case 5:
-              console.log('GETIN');
-              return _context.abrupt("return", {
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                statusCode: 200,
-                data: JSON.stringify({
-                  data: {
-                    name: authInfo.user
-                  }
-                })
-              });
-
-            case 7:
+            case 4:
               console.log('ERROR');
               return _context.abrupt("return", {
                 headers: {
@@ -61,7 +38,7 @@ function makeAuthEndpointHandler(_ref) {
                 })
               });
 
-            case 9:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -76,3 +53,21 @@ function makeAuthEndpointHandler(_ref) {
     return handle;
   }();
 }
+
+var checkAuth = function checkAuth(_ref2) {
+  var username = _ref2.username,
+      password = _ref2.password;
+  console.log(username, password);
+  return {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    statusCode: 200,
+    data: JSON.stringify({
+      data: {
+        username: username,
+        password: password
+      }
+    })
+  };
+};

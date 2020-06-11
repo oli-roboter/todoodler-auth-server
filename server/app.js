@@ -14,21 +14,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.use('/authorise', authController);
-app.use('/login', authController);
+app.use('/authorise', expressCallback(handleAuthRequest));
+// app.use('/login', expressCallback(handleLoginRequest));
 
-function authController(req, res) {
-  const httpRequest = adaptRequest(req);
-  console.log(httpRequest);
-  handleAuthRequest(httpRequest)
-    .then(({ headers, statusCode, data }) => {
-      console.log(headers, statusCode, data);
-      res
-        .set(headers)
-        .status(statusCode)
-        .send(data)
-    })
-    .catch(e => res.send(status(500).end()));
+function expressCallback(requestHandler) {
+  return function (req, res) {
+    const httpRequest = adaptRequest(req);
+    console.log(httpRequest);
+    requestHandler(httpRequest)
+      .then(({ headers, statusCode, data }) => {
+        // console.log(headers, statusCode, data);
+        res
+          .set(headers)
+          .status(statusCode)
+          .send(data)
+      })
+      .catch(e => res.send(status(500).end()));
+  }
 }
+
 
 export default app;

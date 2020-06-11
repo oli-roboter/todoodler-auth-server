@@ -2,24 +2,8 @@
 export default function makeAuthEndpointHandler({ authInfo }) {
   return async function handle(httpRequest) {
     switch (httpRequest.method) {
-      case 'POST':
-        console.log('POSTIN');
-        return {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          statusCode: 200,
-          data: JSON.stringify({ data: { name: authInfo.user } })
-        };
       case 'GET':
-        console.log('GETIN');
-        return {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          statusCode: 200,
-          data: JSON.stringify({ data: { name: authInfo.user } })
-        };
+        return checkAuth({ authInfo })
       default:
         console.log('ERROR');
         return {
@@ -31,4 +15,15 @@ export default function makeAuthEndpointHandler({ authInfo }) {
         };
     }
   }
+}
+
+const checkAuth = ({ username, password }) => {
+  console.log(username, password)
+  return {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    statusCode: 200,
+    data: JSON.stringify({ data: { username, password } })
+  };
 }
