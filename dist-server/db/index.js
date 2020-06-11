@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = makeDb;
 
-var _config = require("../../config/config");
-
 var _mongodb = _interopRequireDefault(require("mongodb"));
+
+var _config = require("../../config/config");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -30,7 +30,8 @@ function _makeDb() {
             url = _config.MONGO_DB;
             dbName = 'auth';
             client = new MongoClient(url, {
-              useNewUrlParser: true
+              useNewUrlParser: true,
+              useUnifiedTopology: true
             });
             _context.next = 6;
             return client.connect();
@@ -41,6 +42,7 @@ function _makeDb() {
 
           case 8:
             db = _context.sent;
+            // eslint-disable-next-line no-use-before-define
             db.makeId = makeIdFromString;
             return _context.abrupt("return", db);
 

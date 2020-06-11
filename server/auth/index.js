@@ -1,8 +1,8 @@
 import makeAuthEndpointHandler from './auth-endpoint';
-//import DB
-//import DB method handler
+import database from '../db/index';
+import authMethods from './auth-methods';
 
-const dbMethodHandler = { user: "Xineibo", token: 123 }
-const authEndpointHandler = makeAuthEndpointHandler({ dbMethodHandler });
+const dbAuthHandler = authMethods({ database });
+const authEndpointHandler = makeAuthEndpointHandler({ dbAuthHandler });
 
 export default authEndpointHandler;

@@ -1,29 +1,25 @@
+import httpError from '../helpers/http-error';
 
-export default function makeAuthEndpointHandler({ authInfo }) {
+export default function makeAuthEndpointHandler({ dbAuthHandler }) {
+  async function getUser(httpRequest) {
+    const { body } = httpRequest;
+    const { username } = body;
+    const users = await dbAuthHandler.getUser(username);
+    return {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      statusCode: 200,
+      data: JSON.stringify({ users }),
+    };
+  }
+
   return async function handle(httpRequest) {
     switch (httpRequest.method) {
       case 'GET':
-        return checkAuth({ authInfo })
+        return getUser(httpRequest);
       default:
-        console.log('ERROR');
-        return {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          statusCode: 403,
-          data: JSON.stringify({ data: 'Geeeia ERRO' })
-        };
+        return httpError();
     }
   }
-}
-
-const checkAuth = ({ username, password }) => {
-  console.log(username, password)
-  return {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    statusCode: 200,
-    data: JSON.stringify({ data: { username, password } })
-  };
 }

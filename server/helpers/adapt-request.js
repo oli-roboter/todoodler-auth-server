@@ -5,5 +5,5 @@ export default function adaptRequest(req = {}) {
     pathParams: req.parans,
     queryParams: req.query,
     body: req.body,
-  })
+  });
 }
