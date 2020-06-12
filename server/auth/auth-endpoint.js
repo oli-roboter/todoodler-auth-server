@@ -1,4 +1,4 @@
-import httpError from '../helpers/http-error';
+import makeHttpError from '../helpers/http-error';
 
 export default function makeAuthEndpointHandler({ dbAuthHandler }) {
   async function getUser(httpRequest) {
@@ -19,7 +19,10 @@ export default function makeAuthEndpointHandler({ dbAuthHandler }) {
       case 'GET':
         return getUser(httpRequest);
       default:
-        return httpError();
+        return makeHttpError({
+          statusCode: 405,
+          errorMessage: `${httpRequest.method} method not allowed.`,
+        });
     }
-  }
+  };
 }

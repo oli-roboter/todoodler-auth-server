@@ -1,9 +1,12 @@
-export default function httpError() {
+export default function makeHttpError({ statusCode, errorMessage }) {
   return {
     headers: {
       'Content-Type': 'application/json',
     },
-    statusCode: 403,
-    data: JSON.stringify({ data: 'Geeeia ERRO' }),
+    statusCode,
+    data: JSON.stringify({
+      success: false,
+      error: errorMessage,
+    }),
   };
 }

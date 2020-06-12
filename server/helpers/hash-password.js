@@ -1,3 +1,3 @@
-const hashPassword = password => password;
+const hashPassword = (password) => password;
 
 export default hashPassword;
