@@ -2,14 +2,14 @@ import bcrypt from 'bcrypt';
 
 export default function hashPassword() {
   const hashAndSalt = async (password) => {
-    const salt = await bcrypt.genSalt();
-    const hashed = await bcrypt.hash(password, salt);
+    const hashed = await bcrypt.hash(password, 10);
+    console.log('hashed', hashed);
     return hashed;
   };
 
   const checkPassword = async (requestPassword, password) => {
-    const isTokenValid = await bcrypt.compare(requestPassword, password);
-    return isTokenValid;
+    const isPasswordValid = await bcrypt.compare(requestPassword, password);
+    return isPasswordValid;
   };
 
   return Object.freeze({
