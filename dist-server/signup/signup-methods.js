@@ -17,7 +17,7 @@ function dbMethods(_ref) {
   var database = _ref.database;
 
   var signup = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(username) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(username, password) {
       var db, result;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
@@ -31,9 +31,10 @@ function dbMethods(_ref) {
             case 3:
               db = _context.sent;
               _context.next = 6;
-              return db.collection('users').find({
-                username: username
-              }).toArray();
+              return db.collection('users').insert({
+                username: username,
+                password: password
+              });
 
             case 6:
               result = _context.sent;
@@ -47,7 +48,7 @@ function dbMethods(_ref) {
       }, _callee);
     }));
 
-    return function signup(_x) {
+    return function signup(_x, _x2) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -83,7 +84,7 @@ function dbMethods(_ref) {
       }, _callee2);
     }));
 
-    return function getUser(_x2) {
+    return function getUser(_x3) {
       return _ref3.apply(this, arguments);
     };
   }();

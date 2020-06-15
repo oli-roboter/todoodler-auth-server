@@ -27,7 +27,7 @@ export default function makeAuthEndpointHandler({ dbAuthHandler }) {
       winston.error(e);
       return makeHttpError({
         statusCode: 400,
-        errorMessage: 'Bad request. GET body must be valid JSON.'
+        errorMessage: 'Bad request. GET body must be valid JSON.',
       });
     }
   }
