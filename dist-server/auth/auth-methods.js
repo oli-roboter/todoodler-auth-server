@@ -23,7 +23,7 @@ function dbMethods(_ref) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _winston["default"].info('Getting user');
+              _winston["default"].info('Getting user token');
 
               _context.next = 3;
               return database();
@@ -31,7 +31,7 @@ function dbMethods(_ref) {
             case 3:
               db = _context.sent;
               _context.next = 6;
-              return db.collection('users').find({
+              return db.collection('tokens').find({
                 username: username
               }).toArray();
 

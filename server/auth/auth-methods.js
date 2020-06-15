@@ -11,7 +11,7 @@ export default function dbMethods({ database }) {
       .toArray();
 
     return result;
-  };
+  }
 
   return Object.freeze({
     getUser,

@@ -3,16 +3,19 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = httpError;
+exports["default"] = makeHttpError;
 
-function httpError() {
+function makeHttpError(_ref) {
+  var statusCode = _ref.statusCode,
+      errorMessage = _ref.errorMessage;
   return {
     headers: {
       'Content-Type': 'application/json'
     },
-    statusCode: 403,
+    statusCode: statusCode,
     data: JSON.stringify({
-      data: 'Geeeia ERRO'
+      success: false,
+      error: errorMessage
     })
   };
 }
