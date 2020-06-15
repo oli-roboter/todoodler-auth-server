@@ -19,6 +19,8 @@ var _adaptRequest = _interopRequireDefault(require("./helpers/adapt-request"));
 
 var _auth = _interopRequireDefault(require("./auth"));
 
+var _login = _interopRequireDefault(require("./login"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var app = (0, _express["default"])();
@@ -46,7 +48,8 @@ function expressCallback(requestHandler) {
   };
 }
 
-app.use('/authorise', expressCallback(_auth["default"])); // app.use('/login', expressCallback(handleLoginRequest));
+app.use('/authorise', expressCallback(_auth["default"]));
+app.use('/login', expressCallback(_login["default"])); // app.use('/signup', expressCallback(handleSignUpRequest));
 
 var _default = app;
 exports["default"] = _default;

@@ -5,6 +5,7 @@ import winston from 'winston/lib/winston/config';
 import initLogger from '../config/logger-config';
 import adaptRequest from './helpers/adapt-request';
 import handleAuthRequest from './auth';
+import handleLoginRequest from './login';
 
 const app = express();
 
@@ -32,6 +33,7 @@ function expressCallback(requestHandler) {
 }
 
 app.use('/authorise', expressCallback(handleAuthRequest));
-// app.use('/login', expressCallback(handleLoginRequest));
+app.use('/login', expressCallback(handleLoginRequest));
+// app.use('/signup', expressCallback(handleSignUpRequest));
 
 export default app;
