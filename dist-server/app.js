@@ -21,6 +21,8 @@ var _auth = _interopRequireDefault(require("./auth"));
 
 var _login = _interopRequireDefault(require("./login"));
 
+var _signup = _interopRequireDefault(require("./signup"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var app = (0, _express["default"])();
@@ -49,7 +51,7 @@ function expressCallback(requestHandler) {
 }
 
 app.use('/authorise', expressCallback(_auth["default"]));
-app.use('/login', expressCallback(_login["default"])); // app.use('/signup', expressCallback(handleSignUpRequest));
-
+app.use('/login', expressCallback(_login["default"]));
+app.use('/signup', expressCallback(_signup["default"]));
 var _default = app;
 exports["default"] = _default;
