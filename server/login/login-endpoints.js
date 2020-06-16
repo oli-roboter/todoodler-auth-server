@@ -10,7 +10,9 @@ export default function makeLoginEndpointHandler({ dbLoginHandler }) {
       const userData = await dbLoginHandler.login(username);
       if (userData.length > 0) {
         winston.info('Checking user info');
-        const isPasswordMatch = hashPassword.checkPassword(password, userData.password);
+        const passwordEncryption = hashPassword();
+        const isPasswordMatch = await passwordEncryption
+          .checkPassword(password, userData[0].password);
         if (isPasswordMatch) {
           return {
             headers: {

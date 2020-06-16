@@ -6,7 +6,7 @@ export default function dbMethods({ database }) {
     const db = await database();
     const result = await db
       .collection('users')
-      .insert({ username, password });
+      .insertOne({ username, password });
 
     return result;
   };
@@ -20,7 +20,7 @@ export default function dbMethods({ database }) {
       .toArray();
 
     return result;
-  }
+  };
 
   return Object.freeze({
     signup,

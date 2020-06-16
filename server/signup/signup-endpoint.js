@@ -8,14 +8,16 @@ export default function makeLSignupEndpointHandler({ dbSignupHandler }) {
       const { body } = httpRequest;
       const { username, password } = body;
       const userExists = await dbSignupHandler.getUser(username);
-      if (userExists.lenght > 0) {
+      if (userExists.length > 0) {
         winston.warn('Username already exists');
         return makeHttpError({
           statusCode: 403,
           errorMessage: 'Username already exists.',
         });
       }
-      const encrypedPassword = await hashPassword.hashAndSalt(password);
+      const passwordEncryption = hashPassword();
+      const encrypedPassword = await passwordEncryption.hashAndSalt(JSON.stringify(password));
+      winston.info('Password salted and hashed');
       await dbSignupHandler.signup(username, encrypedPassword);
       winston.info('User signup completed');
 

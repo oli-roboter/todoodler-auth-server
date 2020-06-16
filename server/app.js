@@ -15,6 +15,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res
+      .status(400)
+      .send({
+        data: {
+          success: false,
+          error: 'Bad request, username or password are not valid',
+        },
+      }); // Bad request
+  }
+  next();
+});
 
 function expressCallback(requestHandler) {
   return function reqRes(req, res) {
