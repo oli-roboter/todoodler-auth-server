@@ -1,4 +1,3 @@
-// import hashPassword from '../helpers/hash-password';
 import winston from 'winston';
 
 export default function dbMethods({ database }) {

@@ -4,18 +4,19 @@ import makeHttpError from '../helpers/http-error';
 export default function makeAuthEndpointHandler({ dbAuthHandler }) {
   async function checkUserToken(httpRequest) {
     try {
-      const { body } = httpRequest;
-      const { username, token } = body;
-      const users = await dbAuthHandler.getUser(username);
-      const isTokenValid = token === users.token;
-      winston.info('User token validated');
+      const { body, headers } = httpRequest;
+      const { username } = body;
+      const token = headers['x-todo-token'];
+      const user = await dbAuthHandler.getUser(username);
+      const isTokenValid = token === user.token && token;
+      winston.info('User token being validated...');
       if (isTokenValid) {
         return {
           headers: {
             'Content-Type': 'application/json',
           },
           statusCode: 200,
-          data: isTokenValid,
+          data: token,
         };
       }
       winston.warn('User token is not valid');
@@ -26,8 +27,8 @@ export default function makeAuthEndpointHandler({ dbAuthHandler }) {
     } catch (e) {
       winston.error(e);
       return makeHttpError({
-        statusCode: 400,
-        errorMessage: 'Bad request. GET body must be valid JSON.',
+        statusCode: 500,
+        errorMessage: e.message,
       });
     }
   }

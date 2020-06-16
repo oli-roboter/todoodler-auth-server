@@ -8,7 +8,7 @@ export default function makeLSignupEndpointHandler({ dbSignupHandler }) {
       const { body } = httpRequest;
       const { username, password } = body;
       const userExists = await dbSignupHandler.getUser(username);
-      if (userExists) {
+      if (userExists.lenght > 0) {
         winston.warn('Username already exists');
         return makeHttpError({
           statusCode: 403,
@@ -29,8 +29,8 @@ export default function makeLSignupEndpointHandler({ dbSignupHandler }) {
     } catch (e) {
       winston.error(e);
       return makeHttpError({
-        statusCode: 400,
-        errorMessage: 'Bad request. POST body must be valid JSON.',
+        statusCode: 500,
+        errorMessage: e.message,
       });
     }
   }

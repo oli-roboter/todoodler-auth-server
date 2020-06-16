@@ -4,6 +4,7 @@ import winston from 'winston';
 export default function dbMethods({ database }) {
   const getUser = async (username) => {
     winston.info('Getting user token');
+
     const db = await database();
     const result = await db
       .collection('tokens')

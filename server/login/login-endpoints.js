@@ -8,18 +8,20 @@ export default function makeLoginEndpointHandler({ dbLoginHandler }) {
       const { body } = httpRequest;
       const { username, password } = body;
       const userData = await dbLoginHandler.login(username);
-      const isPasswordMatch = hashPassword.checkPassword(password, userData.password);
-      winston.info('User password validation completed');
-      if (isPasswordMatch) {
-        return {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          statusCode: 200,
-          data: { login: 'success' },
-        };
+      if (userData.length > 0) {
+        winston.info('Checking user info');
+        const isPasswordMatch = hashPassword.checkPassword(password, userData.password);
+        if (isPasswordMatch) {
+          return {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            statusCode: 200,
+            data: { login: 'success' },
+          };
+        }
       }
-      winston.warn('Password is incorrect');
+      winston.warn('Username or password are incorrect');
       return makeHttpError({
         statusCode: 403,
         errorMessage: 'Not authorized.',
@@ -27,8 +29,8 @@ export default function makeLoginEndpointHandler({ dbLoginHandler }) {
     } catch (e) {
       winston.error(e);
       return makeHttpError({
-        statusCode: 400,
-        errorMessage: 'Bad request. POST body must be valid JSON.',
+        statusCode: 500,
+        errorMessage: e.message,
       });
     }
   }

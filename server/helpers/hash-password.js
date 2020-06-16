@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 export default function hashPassword() {
   const hashAndSalt = async (password) => {
     const hashed = await bcrypt.hash(password, 10);
-    console.log('hashed', hashed);
     return hashed;
   };
 
