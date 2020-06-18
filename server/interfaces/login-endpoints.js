@@ -8,7 +8,6 @@ export default function makeLoginEndpointHandler({ authDB }) {
       const { body } = httpRequest;
       const { username, password } = body;
       const userData = await authDB.findUserByUsername(username);
-      console.log('userData', userData);
       if (userData.length > 0) {
         winston.info('Checking user info');
         const passwordEncryption = hashPassword();

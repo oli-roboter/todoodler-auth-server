@@ -1,17 +1,20 @@
 /* eslint-disable no-return-await */
 import bcrypt from 'bcrypt';
 
-export default function hashPassword() {
-  const returnStringPassword = (password) => (typeof password === 'string' ? password : JSON.stringify(password));
+const convertToString = (password) => {
+  if (typeof password === 'string') return password;
+  return JSON.stringify(password);
+};
 
+export default function hashPassword() {
   const hashAndSalt = async (password) => {
-    const passwordToHash = returnStringPassword(password);
-    return await bcrypt.hash(passwordToHash, 10);
+    const returnStringPassword = convertToString(password);
+    return await bcrypt.hash(returnStringPassword, 10);
   };
 
   const checkPassword = async (requestPassword, password) => {
-    const passwordToHash = returnStringPassword(requestPassword);
-    return await bcrypt.compare(passwordToHash, password);
+    const passwordToCompare = convertToString(requestPassword);
+    return await bcrypt.compare(passwordToCompare, password);
   };
 
   return Object.freeze({

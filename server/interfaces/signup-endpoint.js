@@ -9,15 +9,15 @@ export default function makeLSignupEndpointHandler({ authDB }) {
       const { username, password } = body;
       const userExists = await authDB.findUserByUsername(username);
       if (userExists.length > 0) {
-        // winston.warn('Username already exists');
+        winston.warn('Username already exists');
         return makeHttpError({
           statusCode: 403,
           errorMessage: 'Username already exists.',
         });
       }
       const passwordEncryption = hashPassword();
-      const encrypedPassword = await passwordEncryption.hashAndSalt(JSON.stringify(password));
-      // winston.info('Password salted and hashed');
+      const encrypedPassword = await passwordEncryption.hashAndSalt(password);
+      winston.info('Password salted and hashed');
       await authDB.insertUser(username, encrypedPassword);
       winston.info('User signup completed');
 
@@ -30,7 +30,6 @@ export default function makeLSignupEndpointHandler({ authDB }) {
       };
     } catch (e) {
       winston.error(e);
-      console.error('Errinho', e);
       return makeHttpError({
         statusCode: 500,
         errorMessage: e.message,
