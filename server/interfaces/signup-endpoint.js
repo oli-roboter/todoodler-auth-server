@@ -25,7 +25,7 @@ export default function makeLSignupEndpointHandler({ authDB }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        statusCode: 200,
+        statusCode: 201,
         data: { signup: 'success' },
       };
     } catch (e) {

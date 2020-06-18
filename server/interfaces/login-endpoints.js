@@ -51,14 +51,20 @@ export default function makeLoginEndpointHandler({ authDB }) {
       const { body, headers } = httpRequest;
       const token = headers['x-todo-token'];
       const { username } = body;
-      await authDB.deleteToken(username, token);
-      return {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        statusCode: 200,
-        data: { logout: 'success' },
-      };
+      const result = await authDB.deleteToken(username, token);
+      if (result) {
+        return {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          statusCode: 200,
+          data: { logout: 'success' },
+        };
+      }
+      return makeHttpError({
+        statusCode: 404,
+        errorMessage: 'User does not seem to be logged in',
+      });
     } catch (e) {
       winston.error(e);
       return makeHttpError({
