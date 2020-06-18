@@ -7,12 +7,4 @@ const signupEndpointHandler = makeSignupEndpointHandler({ authDB });
 const loginEndpointHandler = makeLoginEndpointHandler({ authDB });
 const authEndpointHandler = makeAuthEndpointHandler({ authDB });
 
-export default function makeRequestHandlers() {
-  return Object.freeze({
-    signupEndpointHandler,
-    loginEndpointHandler,
-    authEndpointHandler,
-  });
-}
-
 export { signupEndpointHandler, loginEndpointHandler, authEndpointHandler };

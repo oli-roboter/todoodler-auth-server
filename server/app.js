@@ -7,7 +7,7 @@ import adaptRequest from './helpers/adapt-request';
 import {
   signupEndpointHandler,
   loginEndpointHandler,
-  authEndpointHandler
+  authEndpointHandler,
 } from './interfaces';
 
 const app = express();
@@ -26,7 +26,7 @@ app.use((err, req, res, next) => {
           success: false,
           error: 'Bad request, username or password are not valid',
         },
-      }); // Bad request
+      });
   }
   next();
 });
@@ -48,7 +48,6 @@ function expressCallback(requestHandler) {
   };
 }
 
-// app.use('/',{})
 app.use('/authorise', expressCallback(authEndpointHandler));
 app.use('/login', expressCallback(loginEndpointHandler));
 app.use('/signup', expressCallback(signupEndpointHandler));
