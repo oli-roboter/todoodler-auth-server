@@ -23,7 +23,6 @@ export default function makeLoginEndpointHandler({ authDB }) {
           .checkPassword(password, userData[0].password);
         if (isPasswordMatch) {
           const token = await saveToken(username);
-          console.log('token', token);
           return {
             headers: {
               'Content-Type': 'application/json',
@@ -47,10 +46,34 @@ export default function makeLoginEndpointHandler({ authDB }) {
     }
   }
 
+  async function logout(httpRequest) {
+    try {
+      const { body, headers } = httpRequest;
+      const token = headers['x-todo-token'];
+      const { username } = body;
+      await authDB.deleteToken(username, token);
+      return {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        statusCode: 200,
+        data: { logout: 'success' },
+      };
+    } catch (e) {
+      winston.error(e);
+      return makeHttpError({
+        statusCode: 500,
+        errorMessage: e.message,
+      });
+    }
+  }
+
   return async function handle(httpRequest) {
     switch (httpRequest.method) {
       case 'POST':
         return login(httpRequest);
+      case 'DELETE':
+        return logout(httpRequest);
       default:
         return makeHttpError({
           statusCode: 405,
