@@ -2,12 +2,13 @@ import winston from 'winston';
 import makeHttpError from '../helpers/http-error';
 import hashPassword from '../helpers/hash-password';
 
-export default function makeLoginEndpointHandler({ dbLoginHandler }) {
+export default function makeLoginEndpointHandler({ authDB }) {
   async function login(httpRequest) {
     try {
       const { body } = httpRequest;
       const { username, password } = body;
-      const userData = await dbLoginHandler.login(username);
+      const userData = await authDB.findUserByUsername(username);
+      console.log('userData', userData);
       if (userData.length > 0) {
         winston.info('Checking user info');
         const passwordEncryption = hashPassword();

@@ -4,9 +4,11 @@ import cookieParser from 'cookie-parser';
 import winston from 'winston/lib/winston/config';
 import initLogger from '../config/logger-config';
 import adaptRequest from './helpers/adapt-request';
-import handleAuthRequest from './auth';
-import handleLoginRequest from './login';
-import handleSignUpRequest from './signup';
+import {
+  signupEndpointHandler,
+  loginEndpointHandler,
+  authEndpointHandler
+} from './interfaces';
 
 const app = express();
 
@@ -46,8 +48,9 @@ function expressCallback(requestHandler) {
   };
 }
 
-app.use('/authorise', expressCallback(handleAuthRequest));
-app.use('/login', expressCallback(handleLoginRequest));
-app.use('/signup', expressCallback(handleSignUpRequest));
+// app.use('/',{})
+app.use('/authorise', expressCallback(authEndpointHandler));
+app.use('/login', expressCallback(loginEndpointHandler));
+app.use('/signup', expressCallback(signupEndpointHandler));
 
 export default app;

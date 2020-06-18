@@ -1,5 +1,6 @@
 import mongodb from 'mongodb';
 import { MONGO_DB } from '../../config/config';
+import makeAuthDB from './db';
 
 const { MongoClient } = mongodb;
 const url = MONGO_DB;
@@ -10,9 +11,12 @@ const client = new MongoClient(url,
     useUnifiedTopology: true,
   });
 
-export default async function makeDb() {
+export async function makeDb() {
   if (!client.isConnected()) {
     await client.connect();
   }
   return client.db(dbName);
 }
+
+const authDB = makeAuthDB({ makeDb });
+export default authDB;

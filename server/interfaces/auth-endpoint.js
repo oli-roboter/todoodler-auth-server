@@ -1,13 +1,13 @@
 import winston from 'winston';
 import makeHttpError from '../helpers/http-error';
 
-export default function makeAuthEndpointHandler({ dbAuthHandler }) {
+export default function makeAuthEndpointHandler({ authDB }) {
   async function checkUserToken(httpRequest) {
     try {
       const { body, headers } = httpRequest;
       const { username } = body;
       const token = headers['x-todo-token'];
-      const user = await dbAuthHandler.getUser(username);
+      const user = await authDB.findTokenByUsername(username);
       const isTokenValid = token === user.token && token;
       winston.info('User token being validated...');
       if (isTokenValid) {
