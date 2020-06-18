@@ -1,5 +1,5 @@
 import makeLoginEndpointHandler from './login-endpoints';
-import database from '../db/index';
+import database from '../data-access/index';
 import loginMethods from './login-methods';
 
 const dbLoginHandler = loginMethods({ database });

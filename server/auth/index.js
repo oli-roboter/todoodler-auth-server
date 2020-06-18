@@ -1,5 +1,5 @@
 import makeAuthEndpointHandler from './auth-endpoint';
-import database from '../db/index';
+import database from '../data-access/index';
 import authMethods from './auth-methods';
 
 const dbAuthHandler = authMethods({ database });
