@@ -8,6 +8,19 @@ export default function makeAuthDB({ makeDb }) {
     return result;
   };
 
+  const insertToken = async (username, token) => {
+    const db = await makeDb();
+    const result = await db
+      .collection('token')
+      .replaceOne(
+        { username },
+        { username, token },
+        { upsert: true },
+      );
+
+    return result;
+  };
+
   const findUserByUsername = async (username) => {
     const db = await makeDb();
     const result = await db
@@ -30,6 +43,7 @@ export default function makeAuthDB({ makeDb }) {
 
   return Object.freeze({
     insertUser,
+    insertToken,
     findUserByUsername,
     findTokenByUsername,
   });

@@ -1,8 +1,16 @@
 import winston from 'winston';
 import makeHttpError from '../helpers/http-error';
 import hashPassword from '../helpers/hash-password';
+import generateToken from '../helpers/token-generator';
 
 export default function makeLoginEndpointHandler({ authDB }) {
+  async function saveToken(username) {
+    const token = generateToken();
+    // eslint-disable-next-line no-return-await
+    await authDB.insertToken(username, token);
+    return token;
+  }
+
   async function login(httpRequest) {
     try {
       const { body } = httpRequest;
@@ -14,12 +22,14 @@ export default function makeLoginEndpointHandler({ authDB }) {
         const isPasswordMatch = await passwordEncryption
           .checkPassword(password, userData[0].password);
         if (isPasswordMatch) {
+          const token = await saveToken(username);
+          console.log('token', token);
           return {
             headers: {
               'Content-Type': 'application/json',
             },
             statusCode: 200,
-            data: { login: 'success' },
+            data: { login: 'success', token },
           };
         }
       }
