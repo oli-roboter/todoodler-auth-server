@@ -23,6 +23,7 @@ export default function makeLoginEndpointHandler({ authDB }) {
           .checkPassword(password, userData[0].password);
         if (isPasswordMatch) {
           const token = await saveToken(username);
+          winston.info('User token created and stored');
           return {
             headers: {
               'Content-Type': 'application/json',
@@ -53,6 +54,7 @@ export default function makeLoginEndpointHandler({ authDB }) {
       const { username } = body;
       const result = await authDB.deleteToken(username, token);
       if (result) {
+        winston.info('user logged out successfully');
         return {
           headers: {
             'Content-Type': 'application/json',
