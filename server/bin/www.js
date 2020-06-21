@@ -3,7 +3,6 @@
 /**
  * Module dependencies.
  */
-import winston from 'winston';
 import app from '../app';
 const debug = require('debug')('server:server')
 import http from 'http';
@@ -88,6 +87,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('listening on ' + bind);
-  winston.info(`listening on ${bind}`);
 }
 
