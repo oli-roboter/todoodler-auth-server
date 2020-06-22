@@ -1,4 +1,4 @@
-import winston from 'winston';
+// import winston from 'winston';
 import makeHttpError from '../helpers/http-error';
 import hashPassword from '../helpers/hash-password';
 
@@ -15,7 +15,7 @@ export default function makeLSignupEndpointHandler({ authDB }) {
       }
       const userExists = await authDB.findUserByUsername(username);
       if (userExists.length > 0) {
-        winston.warn('Username already exists');
+        // winston.warn('Username already exists');
         return makeHttpError({
           statusCode: 403,
           errorMessage: 'Username already exists.',
@@ -23,9 +23,9 @@ export default function makeLSignupEndpointHandler({ authDB }) {
       }
       const passwordEncryption = hashPassword();
       const encrypedPassword = await passwordEncryption.hashAndSalt(password);
-      winston.info('Password salted and hashed');
+      // winston.info('Password salted and hashed');
       await authDB.insertUser(username, encrypedPassword);
-      winston.info('User signup completed');
+      // winston.info('User signup completed');
 
       return {
         headers: {
@@ -35,7 +35,7 @@ export default function makeLSignupEndpointHandler({ authDB }) {
         data: { signup: 'success' },
       };
     } catch (e) {
-      winston.error(e);
+      // winston.error(e);
       return makeHttpError({
         statusCode: 500,
         errorMessage: e.message,

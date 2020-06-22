@@ -1,4 +1,4 @@
-import winston from 'winston';
+// import winston from 'winston';
 import makeHttpError from '../helpers/http-error';
 import hashPassword from '../helpers/hash-password';
 import generateToken from '../helpers/token-generator';
@@ -23,13 +23,13 @@ export default function makeLoginEndpointHandler({ authDB }) {
       }
       const userData = await authDB.findUserByUsername(username);
       if (userData.length > 0) {
-        winston.info('Checking user info');
+        // winston.info('Checking user info');
         const passwordEncryption = hashPassword();
         const isPasswordMatch = await passwordEncryption
           .checkPassword(password, userData[0].password);
         if (isPasswordMatch) {
           const token = await saveToken(username);
-          winston.info('User token created and stored');
+          // winston.info('User token created and stored');
           return {
             headers: {
               'Content-Type': 'application/json',
@@ -39,13 +39,13 @@ export default function makeLoginEndpointHandler({ authDB }) {
           };
         }
       }
-      winston.warn('Username or password are incorrect');
+      // winston.warn('Username or password are incorrect');
       return makeHttpError({
         statusCode: 403,
         errorMessage: 'Not authorized.',
       });
     } catch (e) {
-      winston.error(e);
+      // winston.error(e);
       return makeHttpError({
         statusCode: 500,
         errorMessage: e.message,
@@ -56,11 +56,17 @@ export default function makeLoginEndpointHandler({ authDB }) {
   async function logout(httpRequest) {
     try {
       const { body, headers } = httpRequest;
-      const token = headers['x-todo-token'];
       const { username } = body;
+      const token = headers['x-todo-token'];
+      if (!username || !token) {
+        return makeHttpError({
+          statusCode: 400,
+          errorMessage: 'Bad request.',
+        });
+      }
       const result = await authDB.deleteToken(username, token);
       if (result) {
-        winston.info('user logged out successfully');
+        // winston.info('user logged out successfully');
         return {
           headers: {
             'Content-Type': 'application/json',
@@ -74,7 +80,7 @@ export default function makeLoginEndpointHandler({ authDB }) {
         errorMessage: 'User does not seem to be logged in',
       });
     } catch (e) {
-      winston.error(e);
+      // winston.error(e);
       return makeHttpError({
         statusCode: 500,
         errorMessage: e.message,

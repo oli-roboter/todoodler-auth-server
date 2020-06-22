@@ -1,4 +1,4 @@
-import winston from 'winston';
+// import winston from 'winston';
 import makeHttpError from '../helpers/http-error';
 
 export default function makeAuthEndpointHandler({ authDB }) {
@@ -14,24 +14,24 @@ export default function makeAuthEndpointHandler({ authDB }) {
         });
       }
       const user = await authDB.findTokenByUsername(username);
-      const isTokenValid = token === user.token;
-      winston.info('User token being validated...');
+      const isTokenValid = token === user[0].token;
+      // winston.info('User token being validated...');
       if (isTokenValid) {
         return {
           headers: {
             'Content-Type': 'application/json',
           },
           statusCode: 200,
-          data: token,
+          data: { token },
         };
       }
-      winston.warn('User token is not valid');
+      // winston.warn('User token is not valid');
       return makeHttpError({
         statusCode: 403,
         errorMessage: 'Not authorized.',
       });
     } catch (e) {
-      winston.error(e);
+      // winston.error(e);
       return makeHttpError({
         statusCode: 500,
         errorMessage: e.message,
