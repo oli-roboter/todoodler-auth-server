@@ -10,7 +10,7 @@ export default function makeAuthDB({ makeDb }) {
   const insertToken = async (username, token) => {
     const db = await makeDb();
     return await db
-      .collection('token')
+      .collection('tokens')
       .replaceOne(
         { username },
         { username, token },
@@ -21,7 +21,7 @@ export default function makeAuthDB({ makeDb }) {
   const deleteToken = async (username, token) => {
     const db = await makeDb();
     const response = await db
-      .collection('token')
+      .collection('tokens')
       .findOneAndDelete({ username, token });
 
     if (response.lastErrorObject.n === 1) return true;
