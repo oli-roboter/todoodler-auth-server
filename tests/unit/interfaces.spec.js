@@ -1,17 +1,18 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-undef */
-import { signupEndpointHandler, loginEndpointHandler, authEndpointHandler } from './index';
-import makeAuthEndpointHandler from './auth-endpoint';
-import makeLoginEndpointHandler from './login-endpoints';
-import makeSignupEndpointHandler from './signup-endpoint';
-import { mockRequests } from '../../tests/fixtures/mock-data';
+import { signupEndpointHandler, loginEndpointHandler, authEndpointHandler } from '../../server/interfaces/index';
+import makeAuthEndpointHandler from '../../server/interfaces/auth-endpoint';
+import makeLoginEndpointHandler from '../../server/interfaces/login-endpoints';
+import makeSignupEndpointHandler from '../../server/interfaces/signup-endpoint';
+import { mockRequests } from '../fixtures/mock-data';
 
 describe('unit tests for all route handlers', () => {
   it('returns 405 error for wrong method', async () => {
-    const { signup, login, auth } = mockRequests.wrongMethods;
+    const { signup, login, logout, auth } = mockRequests.wrongMethods;
 
     signupEndpointHandler(signup);
     loginEndpointHandler(login);
+    loginEndpointHandler(logout);
     authEndpointHandler(auth);
 
     const data = await Promise.all([
@@ -24,7 +25,7 @@ describe('unit tests for all route handlers', () => {
   });
 
   describe('returns 400 for bad request', () => {
-    const { signup, login, authNoBody, authNoHeader } = mockRequests.badRequest;
+    const { signup, login, logout, authNoBody, authNoHeader } = mockRequests.badRequest;
     it('missing username and password for signup', async () => {
       const signupRes = await signupEndpointHandler(signup);
       expect(signupRes.statusCode).toEqual(400);
@@ -33,6 +34,11 @@ describe('unit tests for all route handlers', () => {
     it('missing username and password for login', async () => {
       const loginRes = await loginEndpointHandler(login);
       expect(loginRes.statusCode).toEqual(400);
+    });
+
+    it('missing username and token for logout', async () => {
+      const logoutRes = await loginEndpointHandler(logout);
+      expect(logoutRes.statusCode).toEqual(400);
     });
 
     it('missing username for authentication', async () => {
@@ -51,7 +57,7 @@ describe('unit tests for all route handlers', () => {
     const fakeLoginEndpointHandler = makeLoginEndpointHandler({});
     const fakeAuthEndpointHandler = makeAuthEndpointHandler({});
 
-    const { postRequest, getRequest } = mockRequests;
+    const { postRequest, getRequest, deleteRequest } = mockRequests;
     it('signup error', async () => {
       const signupRes = await fakeSignupEndpointHandler(postRequest);
       expect(signupRes.statusCode).toEqual(500);
@@ -59,6 +65,11 @@ describe('unit tests for all route handlers', () => {
 
     it('login error', async () => {
       const loginRes = await fakeLoginEndpointHandler(postRequest);
+      expect(loginRes.statusCode).toEqual(500);
+    });
+
+    it('logout error', async () => {
+      const loginRes = await fakeLoginEndpointHandler(deleteRequest);
       expect(loginRes.statusCode).toEqual(500);
     });
 

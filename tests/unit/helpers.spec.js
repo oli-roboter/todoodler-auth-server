@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-import adaptRequest from './adapt-request';
-import hashPassword from './hash-password';
-import httpError from './http-error';
+import adaptRequest from '../../server/helpers/adapt-request';
+import hashPassword from '../../server/helpers/hash-password';
+import httpError from '../../server/helpers/http-error';
+import generateToken from '../../server/helpers/token-generator';
 
 const passwordEncription = hashPassword();
 
@@ -33,6 +34,12 @@ describe('testing adaptRequest function', () => {
 });
 
 describe('testing password encription and decription', () => {
+  test('token generator generates the token correctly', () => {
+    const token = generateToken();
+    expect(token.length).toBe(43);
+    expect(token).toMatch(/[A-Za-z0-9+/=]/);
+  });
+
   test('hash password returns hashed password', async () => {
     const password = '123';
     const hashedPasseword = await passwordEncription.hashAndSalt(password);
@@ -51,9 +58,9 @@ describe('testing password encription and decription', () => {
 
 test('it generates an error message with success set to false, and statusCode 400 and error message', () => {
   const customError = httpError({ statusCode: 400, errorMessage: 'Test' });
-  const data = JSON.parse(customError.data);
+  const errorData = customError.data;
   expect(customError.statusCode).toEqual(400);
-  expect(data.success).toBe(false);
-  expect(data.error).toEqual('Test');
+  expect(errorData.success).toBe(false);
+  expect(errorData.error).toEqual('Test');
   expect(customError.headers).not.toBe.empty;
 });

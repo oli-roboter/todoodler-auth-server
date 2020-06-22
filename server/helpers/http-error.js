@@ -4,9 +4,9 @@ export default function makeHttpError({ statusCode, errorMessage }) {
       'Content-Type': 'application/json',
     },
     statusCode,
-    data: JSON.stringify({
+    data: {
       success: false,
       error: errorMessage,
-    }),
+    },
   };
 }

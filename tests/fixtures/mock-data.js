@@ -2,6 +2,7 @@
 export const testUser = {
   username: 'Teddy Test',
   password: '12345678',
+  wrongPassword: '87654321',
   token: '123test-token321',
   newToken: '123new-token321',
 };
@@ -10,11 +11,13 @@ export const mockRequests = {
   wrongMethods: {
     signup: { method: 'GET' },
     login: { method: 'GET' },
+    logout: { method: 'POST' },
     auth: { method: 'DELETE' },
   },
   badRequest: {
     signup: { method: 'POST', body: {} },
     login: { method: 'POST', body: { password: testUser.password } },
+    logout: { method: 'DELETE', headers: {}, body: { username: testUser.username } },
     authNoBody: { method: 'GET', headers: { 'x-todo-token': 12345 }, body: {} },
     authNoHeader: { method: 'GET', headers: {}, body: { username: testUser.username } },
   },
@@ -27,5 +30,18 @@ export const mockRequests = {
     method: 'GET',
     headers: { 'x-todo-token': 12345 },
     body: { username: testUser.username },
+  },
+  deleteRequest: {
+    method: 'DELETE',
+    headers: { 'x-todo-token': 12345 },
+    body: { username: testUser.username },
+  },
+  signupRequest: {
+    method: 'POST',
+    body: { username: testUser.username, password: testUser.password },
+  },
+  wrongPasswordRequest: {
+    method: 'POST',
+    body: { username: testUser.username, password: testUser.wrongPassword },
   },
 };

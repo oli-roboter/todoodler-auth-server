@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 import { GenericContainer } from 'testcontainers';
 // // import winston from 'winston';
-import makeAuthDB from './db';
-import { setUrl, makeDb } from '../../tests/fixtures/db';
-import { testUser } from '../../tests/fixtures/mock-data';
+import makeAuthDB from '../../server/data-access/db';
+import { setUrl, makeDb } from '../fixtures/db';
+import { testUser } from '../fixtures/mock-data';
 
 describe('Integration test for database functions', () => {
   let container;

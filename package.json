@@ -10,11 +10,12 @@
     "prod": "NODE_ENV=production npm-run-all build server",
     "dev": "NODE_ENV=development npm-run-all build server",
     "watch:dev": "nodemon",
-    "test": "jest --verbose --runInBand --detectOpenHandles ./server",
-    "test:integration": "jest ./tests"
+    "test:unit": "jest --verbose --runInBand --detectOpenHandles ./tests/unit",
+    "test:all": "jest --verbose --runInBand --detectOpenHandles ./tests",
+    "test:coverage": "jest --verbose --runInBand --detectOpenHandles --coverage ./tests",
+    "test:integration": "jest ./tests/integration"
   },
   "dependencies": {
-    "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "4.1.1",
