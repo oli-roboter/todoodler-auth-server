@@ -23,6 +23,13 @@ describe('testing adaptRequest function', () => {
     expect(response.method).toEqual('POST');
     expect(response.params).toBe(undefined);
   });
+
+  test('adaptRequest does not process unknown keys', () => {
+    const request = { username: 'Oliver' };
+    const response = adaptRequest(request);
+    // eslint-disable-next-line no-prototype-builtins
+    expect(response.hasOwnProperty('username')).toBe(false);
+  });
 });
 
 describe('testing password encription and decription', () => {

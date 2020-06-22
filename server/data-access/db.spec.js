@@ -18,7 +18,7 @@ describe('Integration test for database functions', () => {
       .withExposedPorts(27017)
       .start();
     // winston.info('Container started');
-    const hostaddress = await container.getContainerIpAddress();
+    // const hostaddress = await container.getContainerIpAddress();
     const mappedPort = await container.getMappedPort(27017);
     // winston.info('container address:', hostaddress, mappedPort);
 
@@ -66,8 +66,6 @@ describe('Integration test for database functions', () => {
   it('deletes token by username', async () => {
     const response = await fakeDb.deleteToken(username, newToken);
     const tokenResponse = await fakeDb.findTokenByUsername(username);
-    // console.log('TOJKEN', tokenResponse);
-    // console.log('RESULT', response);
     expect(response).toBe(true);
     expect(tokenResponse.length).toEqual(0);
   });

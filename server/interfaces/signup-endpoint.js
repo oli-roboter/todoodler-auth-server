@@ -7,6 +7,12 @@ export default function makeLSignupEndpointHandler({ authDB }) {
     try {
       const { body } = httpRequest;
       const { username, password } = body;
+      if (!username || !password) {
+        return makeHttpError({
+          statusCode: 400,
+          errorMessage: 'Bad request.',
+        });
+      }
       const userExists = await authDB.findUserByUsername(username);
       if (userExists.length > 0) {
         winston.warn('Username already exists');

@@ -15,6 +15,12 @@ export default function makeLoginEndpointHandler({ authDB }) {
     try {
       const { body } = httpRequest;
       const { username, password } = body;
+      if (!username || !password) {
+        return makeHttpError({
+          statusCode: 400,
+          errorMessage: 'Bad request.',
+        });
+      }
       const userData = await authDB.findUserByUsername(username);
       if (userData.length > 0) {
         winston.info('Checking user info');

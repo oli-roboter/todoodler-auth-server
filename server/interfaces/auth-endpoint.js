@@ -7,8 +7,14 @@ export default function makeAuthEndpointHandler({ authDB }) {
       const { body, headers } = httpRequest;
       const { username } = body;
       const token = headers['x-todo-token'];
+      if (!username || !token) {
+        return makeHttpError({
+          statusCode: 400,
+          errorMessage: 'Bad request.',
+        });
+      }
       const user = await authDB.findTokenByUsername(username);
-      const isTokenValid = token === user.token && token;
+      const isTokenValid = token === user.token;
       winston.info('User token being validated...');
       if (isTokenValid) {
         return {
