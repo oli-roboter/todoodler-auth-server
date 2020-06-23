@@ -1,9 +1,8 @@
 // import winston from 'winston';
-import makeHttpError from '../helpers/http-error';
 import hashPassword from '../helpers/hash-password';
 import generateToken from '../helpers/token-generator';
 
-export default function makeLoginEndpointHandler({ authDB }) {
+export default function makeLoginEndpointHandler({ authDB, httpResponseHandler }) {
   async function saveToken(username) {
     const token = generateToken();
     // eslint-disable-next-line no-return-await
@@ -15,12 +14,7 @@ export default function makeLoginEndpointHandler({ authDB }) {
     try {
       const { body } = httpRequest;
       const { username, password } = body;
-      if (!username || !password) {
-        return makeHttpError({
-          statusCode: 400,
-          errorMessage: 'Bad request.',
-        });
-      }
+      if (!username || !password) return httpResponseHandler[400]();
       const userData = await authDB.findUserByUsername(username);
       if (userData.length > 0) {
         // winston.info('Checking user info');
@@ -30,26 +24,14 @@ export default function makeLoginEndpointHandler({ authDB }) {
         if (isPasswordMatch) {
           const token = await saveToken(username);
           // winston.info('User token created and stored');
-          return {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            statusCode: 200,
-            data: { login: 'success', token },
-          };
+          return httpResponseHandler[200]({ result: 'Login complete', token });
         }
       }
       // winston.warn('Username or password are incorrect');
-      return makeHttpError({
-        statusCode: 403,
-        errorMessage: 'Not authorized.',
-      });
+      return httpResponseHandler[403]();
     } catch (e) {
       // winston.error(e);
-      return makeHttpError({
-        statusCode: 500,
-        errorMessage: e.message,
-      });
+      return httpResponseHandler[500](e.message);
     }
   }
 
@@ -58,33 +40,14 @@ export default function makeLoginEndpointHandler({ authDB }) {
       const { body, headers } = httpRequest;
       const { username } = body;
       const token = headers['x-todo-token'];
-      if (!username || !token) {
-        return makeHttpError({
-          statusCode: 400,
-          errorMessage: 'Bad request.',
-        });
-      }
+      if (!username || !token) return httpResponseHandler[400]();
       const result = await authDB.deleteToken(username, token);
-      if (result) {
-        // winston.info('user logged out successfully');
-        return {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          statusCode: 200,
-          data: { logout: 'success' },
-        };
-      }
-      return makeHttpError({
-        statusCode: 404,
-        errorMessage: 'User does not seem to be logged in',
-      });
+      if (result) return httpResponseHandler[200]({ result: 'Logout complete' });
+      // winston.info('user logged out successfully');
+      return httpResponseHandler[404]();
     } catch (e) {
       // winston.error(e);
-      return makeHttpError({
-        statusCode: 500,
-        errorMessage: e.message,
-      });
+      return httpResponseHandler[500](e.message);
     }
   }
 
@@ -95,10 +58,7 @@ export default function makeLoginEndpointHandler({ authDB }) {
       case 'DELETE':
         return logout(httpRequest);
       default:
-        return makeHttpError({
-          statusCode: 405,
-          errorMessage: `${httpRequest.method} method not allowed.`,
-        });
+        return httpResponseHandler[405](httpRequest.method);
     }
   };
 }

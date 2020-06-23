@@ -7,6 +7,7 @@ import { mockRequests } from '../fixtures/mock-data';
 import makeAuthEndpointHandler from '../../server/interfaces/auth-endpoint';
 import makeLoginEndpointHandler from '../../server/interfaces/login-endpoints';
 import makeSignupEndpointHandler from '../../server/interfaces/signup-endpoint';
+import httpResponseHandler from '../../server/helpers/http-handler';
 
 describe('e2e test for all routes', () => {
   let container;
@@ -26,9 +27,9 @@ describe('e2e test for all routes', () => {
 
     setUrl(`mongodb://localhost:${mappedPort}`);
     authDB = makeAuthDB({ makeDb });
-    signupEndpointHandler = makeSignupEndpointHandler({ authDB });
-    loginEndpointHandler = makeLoginEndpointHandler({ authDB });
-    authEndpointHandler = makeAuthEndpointHandler({ authDB });
+    signupEndpointHandler = makeSignupEndpointHandler({ authDB, httpResponseHandler });
+    loginEndpointHandler = makeLoginEndpointHandler({ authDB, httpResponseHandler });
+    authEndpointHandler = makeAuthEndpointHandler({ authDB, httpResponseHandler });
     done();
   }, 15000);
 
@@ -39,15 +40,15 @@ describe('e2e test for all routes', () => {
     const { signupRequest } = mockRequests;
     const response = await signupEndpointHandler(signupRequest);
     expect(response.statusCode).toEqual(201);
-    expect(response.data.signup).toEqual('success');
+    expect(response.data.message).toEqual('Signup complete');
   });
 
   test('fail to signup same user again', async () => {
     const { signupRequest } = mockRequests;
     const response = await signupEndpointHandler(signupRequest);
-    expect(response.statusCode).toEqual(403);
+    expect(response.statusCode).toEqual(409);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toEqual('Username already exists.');
+    expect(response.data.error).toEqual('Username already exists');
   });
 
   test('successful login', async () => {
@@ -55,7 +56,7 @@ describe('e2e test for all routes', () => {
     const response = await loginEndpointHandler(postRequest);
     token = response.data.token;
     expect(response.statusCode).toEqual(200);
-    expect(response.data.login).toEqual('success');
+    expect(response.data.message).toEqual('Login complete');
     expect(response.data.token.length).toBeGreaterThan(20);
   });
 
@@ -64,7 +65,7 @@ describe('e2e test for all routes', () => {
     const response = await loginEndpointHandler(wrongPasswordRequest);
     expect(response.statusCode).toEqual(403);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toEqual('Not authorized.');
+    expect(response.data.error).toEqual('Not authorized');
   });
 
   test('successful authorisation', async () => {
@@ -72,6 +73,7 @@ describe('e2e test for all routes', () => {
     getRequest.headers = { 'x-todo-token': token };
     const response = await authEndpointHandler(getRequest);
     expect(response.statusCode).toEqual(200);
+    expect(response.data.message).toEqual('Authorized');
     expect(response.data.token.length).toBeGreaterThan(20);
   });
 
@@ -81,7 +83,7 @@ describe('e2e test for all routes', () => {
     const response = await authEndpointHandler(getRequest);
     expect(response.statusCode).toEqual(403);
     expect(response.data.success).toBe(false);
-    expect(response.data.error).toEqual('Not authorized.');
+    expect(response.data.error).toEqual('Not authorized');
   });
 
   it('successful logout', async () => {
@@ -89,6 +91,6 @@ describe('e2e test for all routes', () => {
     deleteRequest.headers = { 'x-todo-token': token };
     const response = await loginEndpointHandler(deleteRequest);
     expect(response.statusCode).toEqual(200);
-    expect(response.data.logout).toEqual('success');
+    expect(response.data.message).toEqual('Logout complete');
   });
 });

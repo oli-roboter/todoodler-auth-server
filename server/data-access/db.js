@@ -7,6 +7,7 @@ export default function makeAuthDB({ makeDb }) {
       .insertOne({ username, password });
   };
 
+
   const insertToken = async (username, token) => {
     const db = await makeDb();
     return await db

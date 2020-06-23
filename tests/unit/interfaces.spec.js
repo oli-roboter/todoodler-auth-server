@@ -5,6 +5,7 @@ import makeAuthEndpointHandler from '../../server/interfaces/auth-endpoint';
 import makeLoginEndpointHandler from '../../server/interfaces/login-endpoints';
 import makeSignupEndpointHandler from '../../server/interfaces/signup-endpoint';
 import { mockRequests } from '../fixtures/mock-data';
+import httpResponseHandler from '../../server/helpers/http-handler';
 
 describe('unit tests for all route handlers', () => {
   it('returns 405 error for wrong method', async () => {
@@ -53,9 +54,10 @@ describe('unit tests for all route handlers', () => {
   });
 
   describe('returns 500 for other errors', () => {
-    const fakeSignupEndpointHandler = makeSignupEndpointHandler({});
-    const fakeLoginEndpointHandler = makeLoginEndpointHandler({});
-    const fakeAuthEndpointHandler = makeAuthEndpointHandler({});
+    const noDB = undefined;
+    const fakeSignupEndpointHandler = makeSignupEndpointHandler({ noDB, httpResponseHandler });
+    const fakeLoginEndpointHandler = makeLoginEndpointHandler({ noDB, httpResponseHandler });
+    const fakeAuthEndpointHandler = makeAuthEndpointHandler({ noDB, httpResponseHandler });
 
     const { postRequest, getRequest, deleteRequest } = mockRequests;
     it('signup error', async () => {

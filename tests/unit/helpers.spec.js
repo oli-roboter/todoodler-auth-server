@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import adaptRequest from '../../server/helpers/adapt-request';
 import hashPassword from '../../server/helpers/hash-password';
-import httpError from '../../server/helpers/http-error';
+import httpHandler from '../../server/helpers/http-handler';
 import generateToken from '../../server/helpers/token-generator';
 
 const passwordEncription = hashPassword();
@@ -57,10 +57,10 @@ describe('testing password encription and decription', () => {
 });
 
 test('it generates an error message with success set to false, and statusCode 400 and error message', () => {
-  const customError = httpError({ statusCode: 400, errorMessage: 'Test' });
+  const customError = httpHandler[400]();
   const errorData = customError.data;
   expect(customError.statusCode).toEqual(400);
   expect(errorData.success).toBe(false);
-  expect(errorData.error).toEqual('Test');
+  expect(errorData.error).toEqual('Bad request');
   expect(customError.headers).not.toBe.empty;
 });
