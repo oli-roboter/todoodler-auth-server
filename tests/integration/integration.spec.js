@@ -93,4 +93,13 @@ describe('e2e test for all routes', () => {
     expect(response.statusCode).toEqual(200);
     expect(response.data.message).toEqual('Logout complete');
   });
+
+  it('fails to logout (user not logged in)', async () => {
+    const { deleteRequest } = mockRequests;
+    deleteRequest.headers = { 'x-todo-token': token };
+    const response = await loginEndpointHandler(deleteRequest);
+    expect(response.statusCode).toEqual(404);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toEqual('User does not seem to be logged in');
+  });
 });
