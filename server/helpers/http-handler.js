@@ -14,7 +14,7 @@ const makeHttpResponse = ({ statusCode, response }) => {
   const data = {
     success: true,
     error: null,
-    message: result,
+    data: result,
   };
   if (token) data.token = token;
   return {

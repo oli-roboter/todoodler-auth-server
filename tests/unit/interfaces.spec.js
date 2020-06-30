@@ -26,7 +26,7 @@ describe('unit tests for all route handlers', () => {
   });
 
   describe('returns 400 for bad request', () => {
-    const { signup, login, logout, authNoBody, authNoHeader } = mockRequests.badRequest;
+    const { signup, login, logout, authNoParams, authNoHeader } = mockRequests.badRequest;
     it('missing username and password for signup', async () => {
       const signupRes = await signupEndpointHandler(signup);
       expect(signupRes.statusCode).toEqual(400);
@@ -43,7 +43,7 @@ describe('unit tests for all route handlers', () => {
     });
 
     it('missing username for authentication', async () => {
-      const authRes = await authEndpointHandler(authNoBody);
+      const authRes = await authEndpointHandler(authNoParams);
       expect(authRes.statusCode).toEqual(400);
     });
 

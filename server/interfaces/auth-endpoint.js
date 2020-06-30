@@ -2,8 +2,8 @@
 export default function makeAuthEndpointHandler({ authDB, httpResponseHandler }) {
   async function checkUserToken(httpRequest) {
     try {
-      const { body, headers } = httpRequest;
-      const { username } = body;
+      const { queryParams, headers } = httpRequest;
+      const { username } = queryParams;
       const token = headers['x-todo-token'];
       if (!username || !token) return httpResponseHandler[400]();
       const user = await authDB.findTokenByUsername(username);

@@ -18,8 +18,8 @@ export const mockRequests = {
     signup: { method: 'POST', body: {} },
     login: { method: 'POST', body: { password: testUser.password } },
     logout: { method: 'DELETE', headers: {}, body: { username: testUser.username } },
-    authNoBody: { method: 'GET', headers: { 'x-todo-token': 12345 }, body: {} },
-    authNoHeader: { method: 'GET', headers: {}, body: { username: testUser.username } },
+    authNoParams: { method: 'GET', headers: { 'x-todo-token': 12345 }, queryParams: {} },
+    authNoHeader: { method: 'GET', headers: {}, queryParams: { username: testUser.username } },
   },
   postRequest: {
     method: 'POST',
@@ -29,7 +29,7 @@ export const mockRequests = {
   getRequest: {
     method: 'GET',
     headers: { 'x-todo-token': 12345 },
-    body: { username: testUser.username },
+    queryParams: { username: testUser.username },
   },
   deleteRequest: {
     method: 'DELETE',

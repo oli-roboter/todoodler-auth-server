@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import winston from 'winston/lib/winston/config';
@@ -13,6 +14,7 @@ import {
 const app = express();
 
 initLogger();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -48,6 +50,10 @@ function expressCallback(requestHandler) {
   };
 }
 
+app.get('/test', (req, res) => {
+  console.log('Hitting the test');
+  res.send('test success');
+});
 app.use('/authorise', expressCallback(authEndpointHandler));
 app.use('/login', expressCallback(loginEndpointHandler));
 app.use('/signup', expressCallback(signupEndpointHandler));
