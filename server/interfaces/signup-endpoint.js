@@ -18,7 +18,7 @@ export default function makeSignupEndpointHandler({ authDB, httpResponseHandler 
       await authDB.insertUser(username, encrypedPassword, workGroup);
       // winston.info('User signup completed');
 
-      return httpResponseHandler[201]({ result: 'Signup complete' });
+      return httpResponseHandler[201]({ result: { result: 'Signup complete' } });
     } catch (e) {
       // winston.error(e);
       return httpResponseHandler[500](e.message);

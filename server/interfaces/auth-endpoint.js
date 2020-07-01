@@ -4,12 +4,22 @@ export default function makeAuthEndpointHandler({ authDB, httpResponseHandler })
     try {
       const { queryParams, headers } = httpRequest;
       const { username } = queryParams;
-      const token = headers['x-todo-token'];
-      if (!username || !token) return httpResponseHandler[400]();
-      const user = await authDB.findTokenByUsername(username);
-      const isTokenValid = token === user[0].token;
+      const reqToken = headers['x-todo-token'];
+      if (!username || !reqToken) return httpResponseHandler[400]();
+      const user = await authDB.findUserByUsername(username);
+      const { token, workGroup } = user[0];
+      const isTokenValid = reqToken === token && token;
       // winston.info('User token being validated...');
-      if (isTokenValid) return httpResponseHandler[200]({ result: 'Authorized', token });
+      if (isTokenValid) {
+        return httpResponseHandler[200]({
+          result: {
+            result: 'Authorized',
+            username,
+            workGroup,
+            token,
+          },
+        });
+      }
       // winston.warn('User token is not valid');
       return httpResponseHandler[403]();
     } catch (e) {

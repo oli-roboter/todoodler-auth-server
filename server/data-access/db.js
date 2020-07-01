@@ -4,25 +4,34 @@ export default function makeAuthDB({ makeDb }) {
     const db = await makeDb();
     return await db
       .collection('users')
-      .insertOne({ username, password, workGroup });
+      .insertOne({
+        username,
+        password,
+        workGroup,
+        token: null,
+      });
   };
 
   const insertToken = async (username, token) => {
     const db = await makeDb();
     return await db
-      .collection('tokens')
-      .replaceOne(
+      .collection('users')
+      .findOneAndUpdate(
         { username },
-        { username, token },
-        { upsert: true },
+        { $set: { token } },
+        { returnOriginal: false },
       );
   };
 
   const deleteToken = async (username, token) => {
     const db = await makeDb();
     const response = await db
-      .collection('tokens')
-      .findOneAndDelete({ username, token });
+      .collection('users')
+      .findOneAndUpdate(
+        { username, token },
+        { $set: { token: null } },
+        { returnOriginal: false },
+      );
 
     if (response.lastErrorObject.n === 1) return true;
     return false;
@@ -36,19 +45,10 @@ export default function makeAuthDB({ makeDb }) {
       .toArray();
   };
 
-  const findTokenByUsername = async (username) => {
-    const db = await makeDb();
-    return await db
-      .collection('tokens')
-      .find({ username })
-      .toArray();
-  };
-
   return Object.freeze({
     insertUser,
     insertToken,
     deleteToken,
     findUserByUsername,
-    findTokenByUsername,
   });
 }
