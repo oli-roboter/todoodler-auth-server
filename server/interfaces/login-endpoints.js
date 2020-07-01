@@ -6,8 +6,7 @@ export default function makeLoginEndpointHandler({ authDB, httpResponseHandler }
   async function saveToken(username) {
     const token = generateToken();
     // eslint-disable-next-line no-return-await
-    await authDB.insertToken(username, token);
-    return token;
+    return authDB.insertToken(username, token);
   }
 
   async function login(httpRequest) {
@@ -22,9 +21,17 @@ export default function makeLoginEndpointHandler({ authDB, httpResponseHandler }
         const isPasswordMatch = await passwordEncryption
           .checkPassword(password, userData[0].password);
         if (isPasswordMatch) {
-          const token = await saveToken(username);
+          const tokenResult = await saveToken(username);
+          const { token, workGroup } = tokenResult.value;
           // winston.info('User token created and stored');
-          return httpResponseHandler[200]({ result: 'Login complete', token });
+          return httpResponseHandler[200]({
+            result: {
+              result: 'Login complete',
+              username,
+              token,
+              workGroup,
+            },
+          });
         }
       }
       // winston.warn('Username or password are incorrect');
@@ -39,12 +46,21 @@ export default function makeLoginEndpointHandler({ authDB, httpResponseHandler }
     try {
       const { body, headers } = httpRequest;
       const { username } = body;
-      const token = headers['x-todo-token'];
-      if (!username || !token) return httpResponseHandler[400]();
-      const result = await authDB.deleteToken(username, token);
-      if (result) return httpResponseHandler[200]({ result: 'Logout complete' });
-      // winston.info('user logged out successfully');
-      return httpResponseHandler[404]();
+      const reqToken = headers['x-todo-token'];
+      if (!username || !reqToken) return httpResponseHandler[400]();
+      const user = await authDB.findUserByUsername(username);
+      const { token } = user[0];
+
+      if (!token) return httpResponseHandler[404]();
+
+      const isTokenValid = reqToken === token;
+      // winston.info('User token being validated...');
+      if (isTokenValid) {
+        const result = await authDB.deleteToken(username, reqToken);
+        if (result) return httpResponseHandler[200]({ result: { result: 'Logout complete' } });
+        // winston.info('user logged out successfully');
+      }
+      return httpResponseHandler[403]();
     } catch (e) {
       // winston.error(e);
       return httpResponseHandler[500](e.message);
