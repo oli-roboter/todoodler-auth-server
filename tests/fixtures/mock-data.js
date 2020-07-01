@@ -5,6 +5,7 @@ export const testUser = {
   wrongPassword: '87654321',
   token: '123test-token321',
   newToken: '123new-token321',
+  workGroup: 'TestGroup',
 };
 
 export const mockRequests = {
@@ -24,7 +25,11 @@ export const mockRequests = {
   postRequest: {
     method: 'POST',
     headers: { 'x-todo-token': 12345 },
-    body: { username: testUser.username, password: testUser.password },
+    body: {
+      username: testUser.username,
+      password: testUser.password,
+      workGroup: testUser.workGroup,
+    },
   },
   getRequest: {
     method: 'GET',
@@ -38,7 +43,11 @@ export const mockRequests = {
   },
   signupRequest: {
     method: 'POST',
-    body: { username: testUser.username, password: testUser.password },
+    body: {
+      username: testUser.username,
+      password: testUser.password,
+      workGroup: testUser.workGroup,
+    },
   },
   wrongPasswordRequest: {
     method: 'POST',

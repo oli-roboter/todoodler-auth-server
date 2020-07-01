@@ -1,12 +1,11 @@
 /* eslint-disable no-return-await */
 export default function makeAuthDB({ makeDb }) {
-  const insertUser = async (username, password) => {
+  const insertUser = async (username, password, workGroup) => {
     const db = await makeDb();
     return await db
       .collection('users')
-      .insertOne({ username, password });
+      .insertOne({ username, password, workGroup });
   };
-
 
   const insertToken = async (username, token) => {
     const db = await makeDb();

@@ -9,7 +9,7 @@ import makeLoginEndpointHandler from '../../server/interfaces/login-endpoints';
 import makeSignupEndpointHandler from '../../server/interfaces/signup-endpoint';
 import httpResponseHandler from '../../server/helpers/http-handler';
 
-describe('e2e test for all routes', () => {
+describe('Integration test for all routes', () => {
   let container;
   let authDB;
   let signupEndpointHandler;
