@@ -3,15 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = adaptRequest;
+exports.default = adaptRequest;
 
-function adaptRequest() {
-  var req = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function adaptRequest(req = {}) {
   return Object.freeze({
     path: req.path,
     method: req.method,
-    pathParams: req.parans,
+    pathParams: req.params,
     queryParams: req.query,
-    body: req.body
+    body: req.body,
+    headers: req.headers
   });
 }

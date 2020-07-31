@@ -5,30 +5,28 @@
  */
 "use strict";
 
-var _winston = _interopRequireDefault(require("winston"));
-
 var _app = _interopRequireDefault(require("../app"));
 
 var _http = _interopRequireDefault(require("http"));
 
 var _config = require("../../config/config");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var debug = require('debug')('server:server');
+const debug = require('debug')('server:server');
 
 /**
  * Get port from environment and store in Express.
  */
-var port = normalizePort(_config.PORT || '3000');
+const port = normalizePort(_config.PORT || '3000');
 
-_app["default"].set('port', port);
+_app.default.set('port', port);
 /**
  * Create HTTP server.
  */
 
 
-var server = _http["default"].createServer(_app["default"]);
+const server = _http.default.createServer(_app.default);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -42,7 +40,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -89,9 +87,7 @@ function onError(error) {
 
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('listening on ' + bind);
-
-  _winston["default"].info("listening on ".concat(bind));
 }

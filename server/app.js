@@ -9,6 +9,7 @@ import {
   signupEndpointHandler,
   loginEndpointHandler,
   authEndpointHandler,
+  userEndpointHandler,
 } from './interfaces';
 
 const app = express();
@@ -57,5 +58,6 @@ app.get('/test', (req, res) => {
 app.use('/authorise', expressCallback(authEndpointHandler));
 app.use('/login', expressCallback(loginEndpointHandler));
 app.use('/signup', expressCallback(signupEndpointHandler));
+app.use('/users', expressCallback(userEndpointHandler));
 
 export default app;

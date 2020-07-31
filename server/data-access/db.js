@@ -45,10 +45,27 @@ export default function makeAuthDB({ makeDb }) {
       .toArray();
   };
 
+  const findUsersByWorkGroup = async () => {
+    const db = await makeDb();
+    // Not close db connection between methods
+    return {
+      findUser: async (username) => await db
+        .collection('users')
+        .find({ username })
+        .toArray(),
+      findUsers: async (workGroup) => await db
+        .collection('users')
+        .find({ workGroup })
+        .project({ username: 1 })
+        .toArray(),
+    };
+  };
+
   return Object.freeze({
     insertUser,
     insertToken,
     deleteToken,
     findUserByUsername,
+    findUsersByWorkGroup,
   });
 }
