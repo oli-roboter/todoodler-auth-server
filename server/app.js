@@ -3,7 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import winston from 'winston/lib/winston/config';
-import initLogger from '../config/logger-config';
+import initLogger from './config/logger-config';
 import adaptRequest from './helpers/adapt-request';
 import {
   signupEndpointHandler,
@@ -53,7 +53,7 @@ function expressCallback(requestHandler) {
 
 app.get('/test', (req, res) => {
   console.log('Hitting the test');
-  res.send('test success');
+  res.send('auth server test success');
 });
 app.use('/authorise', expressCallback(authEndpointHandler));
 app.use('/login', expressCallback(loginEndpointHandler));

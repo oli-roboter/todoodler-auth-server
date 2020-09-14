@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import { MONGO_DB } from '../../config/config';
+import { MONGO_DB } from '../config/config';
 import makeAuthDB from './db';
 
 const { MongoClient } = mongodb;

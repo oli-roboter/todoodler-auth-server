@@ -5,39 +5,23 @@
  */
 "use strict";
 
-var _app = _interopRequireDefault(require("../app"));
-
 var _http = _interopRequireDefault(require("http"));
 
-var _config = require("../../config/config");
+var _config = require("../config/config");
+
+var _app = _interopRequireDefault(require("../app"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const debug = require('debug')('server:server');
-
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(_config.PORT || '3000');
 
-_app.default.set('port', port);
-/**
- * Create HTTP server.
- */
-
-
-const server = _http.default.createServer(_app.default);
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
+
 
 function normalizePort(val) {
   const port = parseInt(val, 10);
@@ -58,6 +42,24 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
+
+const port = normalizePort(_config.PORT || '3000');
+
+_app.default.set('port', port);
+/**
+ * Create HTTP server.
+ */
+
+
+const server = _http.default.createServer(_app.default);
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 function onError(error) {
   if (error.syscall !== 'listen') {

@@ -15,7 +15,7 @@ var _cookieParser = _interopRequireDefault(require("cookie-parser"));
 
 var _config = _interopRequireDefault(require("winston/lib/winston/config"));
 
-var _loggerConfig = _interopRequireDefault(require("../config/logger-config"));
+var _loggerConfig = _interopRequireDefault(require("./config/logger-config"));
 
 var _adaptRequest = _interopRequireDefault(require("./helpers/adapt-request"));
 
@@ -64,7 +64,7 @@ function expressCallback(requestHandler) {
 
 app.get('/test', (req, res) => {
   console.log('Hitting the test');
-  res.send('test success');
+  res.send('auth server test success');
 });
 app.use('/authorise', expressCallback(_interfaces.authEndpointHandler));
 app.use('/login', expressCallback(_interfaces.loginEndpointHandler));
