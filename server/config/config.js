@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-dotenv.confiqg();
+dotenv.config();
 
 const { AUTH_PORT, NODE_ENV, MONGO_ATLAS_URL } = process.env;
 // const MONGO_DB = process.env.USERS_DB_URL;
