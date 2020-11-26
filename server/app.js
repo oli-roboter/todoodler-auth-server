@@ -12,6 +12,7 @@ import {
   userEndpointHandler,
 } from './interfaces';
 
+const API_ROOT = '/auth';
 const app = express();
 
 initLogger();
@@ -51,13 +52,13 @@ function expressCallback(requestHandler) {
   };
 }
 
-app.get('/test', (req, res) => {
+app.get(`${API_ROOT}/test`, (req, res) => {
   console.log('Hitting the test');
   res.send('auth server test success');
 });
-app.use('/authorise', expressCallback(authEndpointHandler));
-app.use('/login', expressCallback(loginEndpointHandler));
-app.use('/signup', expressCallback(signupEndpointHandler));
-app.use('/users', expressCallback(userEndpointHandler));
+app.use(`${API_ROOT}/authorise`, expressCallback(authEndpointHandler));
+app.use(`${API_ROOT}/login`, expressCallback(loginEndpointHandler));
+app.use(`${API_ROOT}/signup`, expressCallback(signupEndpointHandler));
+app.use(`${API_ROOT}/users`, expressCallback(userEndpointHandler));
 
 export default app;
